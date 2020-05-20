@@ -108,12 +108,14 @@ int isInteger(double* arr, char* get, int& index, int& counter_arr)
 	int numb = 1, numb_2 = 10;
 	while((get[index] >= 48 && get[index] <= 57) || get[index] == '.')
 	{
-		if (get[index] == '.') {
-			numb = 10;
-			numb_2 = 1;
-			index++;
+		if (get[index] == '.' || numb_2 == 1) 
+		{
+			if (get[index] == '.')index++;
+
+				numb *= 10;
+				numb_2 = 1;
 		}
-		arr[counter_arr] = (arr[counter_arr] * numb_2)  +  (((double)get[index++] - (double)'0') / numb);
+		arr[counter_arr] = (arr[counter_arr] * numb_2)  +  (((double)get[index++] - (double)'0') / numb);		
 	}
 	counter_arr++;
 	return (index - 1);
