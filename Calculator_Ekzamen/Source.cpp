@@ -1,71 +1,51 @@
 #include<iostream>
 #include<math.h>
+
 using namespace std;
-void InputLine(char str[], const int n);
 void Input(char* str, double* arr, char* get, const int n);
 int  isInteger(double* arr, char* get, int& index, int& counter_arr);
-void Operator(char get[], char* str, int &counter_str, int& index);
-
-void prioryti(char* str, double* arr, int &counter_arr, int &counter_str, int& j, int& c, char operator_1,char operator_2 ) {
-
-
-
-
-}
-
 void Calculator(char* str, double* arr, int counter_arr, int counter_str)
-
 {
-	for (int i = 0; i < counter_arr; i++) {
-		if (str[i] == '^') {
-
-			arr[i + 1] = pow(arr[i], arr[i + 1]);
-			str[i] = '?';
+	int index;
+	for (int j = 0, c = 0; j < counter_arr && c < counter_str; c++, j++)
+	{
+		if (str[c] == '^')
+		{
+			arr[c + 1] = pow(arr[j], arr[j + 1]);
+			str[c] = '?';
 		}
 	}
-	for (int j = 0, c = 0; j < counter_arr && c < counter_str; c++, j++)
+	for (int j = 0, c = 0, index; j < counter_arr && c < counter_str; c++, j++)
 	{
 		if (str[c + 1] == '?' && (str[c] == '*' || str[c] == '/'))
 		{
-	
-			int index = c + 1;
-			for (; str[index] == '?'; index++);
+			index = c + 1;					           //  index points to '?'
+			for (; str[index] == '?'; index++);       //  after the loop, the index points the item with which to perform the operation
 
-			str[c] == '*' ? arr[index] = arr[j] * arr[index] : arr[index] = arr[j] / arr[index];
-
-				str[c] = '?';
-				continue;
+			str[c] == '*' ? arr[index] = arr[j] * arr[index] : arr[index] = arr[j] / arr[index];	//	assign the result to an array element
+			str[c] = '?';
+			continue;
 		}
 
 		if (str[c] == '*') {
 
 			arr[j + 1] = arr[j] * arr[j + 1];
-			str[c] = '?'; 
+			str[c] = '?';
 		}
 		else if (str[c] == '/')
 		{
-			arr[j + 1] = arr[j] / arr[j+1];
-
-			str[c] = '?'; 
+			arr[j + 1] = arr[j] / arr[j + 1];
+			str[c] = '?';
 		}
 	}
-
-	double rez;
-	int j = 0;
-	for (int c = 0; j < counter_arr && c < counter_str; c++, j++)
+	for (int c = 0, j = 0; j < counter_arr && c < counter_str; c++, j++)
 	{
-		if (str[c + 1] == '?' && (str[c] == '-' || str[c] == '+'))		
-		{ 
-			int index = c + 1;
-			for (; str[index] == '?'; index++);
-			if (str[c] == '+')
-			{
-				arr[index] = arr[j] + arr[index];
-			}
-			else if (str[c] == '-')
-			{
-				arr[index] = arr[j] - arr[index];
-			}
+		if (str[c + 1] == '?' && (str[c] == '-' || str[c] == '+'))
+		{
+		    index = c + 1;					     			 //  index points to '?'
+			for (; str[index] == '?'; index++);				//  after the loop, the index points the item with which to perform the operation
+
+			str[c] == '+' ? arr[index] = arr[j] + arr[index] : arr[index] = arr[j] - arr[index];	//  assign the result to an array element
 			continue;
 		}
 		if (str[c] == '+')
@@ -74,31 +54,31 @@ void Calculator(char* str, double* arr, int counter_arr, int counter_str)
 		}
 		else if (str[c] == '-')
 		{
-			 arr[j + 1] =  arr[j] - arr[j + 1];
+			arr[j + 1] = arr[j] - arr[j + 1];
 		}
 	}
-	for (int i = 0; i < counter_arr; i++) cout << "arr[" << i << "] = " << arr[i] << endl;
+	for (int i = 0; i < counter_arr; i++)cout << "arr[" << i << "] = " << arr[i] << endl;
+   cout << "Rezultat >> " << arr[counter_arr - 1] << endl;
 
-	//cout << "Rezultat >> " << arr[j];
-							                                            //3+3-3*3/2+1-1=   1.5		3+3-3*3/2+1^1= 2.5			3+3-3*3/2^2-10= -6.25
 }
 
-///////////////////////////////////////////////
+///////////////////////////////////////////////		main
  void main()
 {
 	 const int n = 50;
 	 double arr[n]{};
 	 char str[n];
 	 char get[n];
-	 Input(str, arr, get, n);
 
+	 cout << "1. In the end of equation put ' = '\n Enter the equation >> ";  cin.getline(get, n);
+
+	 Input(str, arr, get, n);
 }
- //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+//////////////////////////////////////////////
 
  void Input(char* str, double* arr, char* get, const int n)
  {
-	 int counter_arr = 0, counter_str = 0;
-	 cout << "1. In the end of equation put ' = '\n Enter the equation >> "; InputLine(get, n);
+	 int counter_arr = 0, counter_str = 0;		
 
 	 for (int i = 0; get[i] != '='; i++)
 	 {
@@ -106,9 +86,18 @@ void Calculator(char* str, double* arr, int counter_arr, int counter_str)
 		 {
 			 i = isInteger(arr, get, i, counter_arr);
 		 }
-		 else if (get[i] != ' ')
+		 else
 		 {
-			 Operator(get, str, counter_str, i);
+			 switch (get[i])
+			 {
+				 case '+': str[counter_str++] = '+'; break;
+				 case '-': str[counter_str++] = '-'; break;
+				 case '*': str[counter_str++] = '*'; break;
+				 case '/': str[counter_str++] = '/'; break;
+				 case '^': str[counter_str++] = '^'; break;
+				 case '(': str[counter_str++] = '('; break;
+				 case ')': str[counter_str++] = ')'; break;
+			 }
 		 }
 	 }
 	 Calculator(str, arr, counter_arr, counter_str);
@@ -116,24 +105,18 @@ void Calculator(char* str, double* arr, int counter_arr, int counter_str)
 
 int isInteger(double* arr, char* get, int& index, int& counter_arr)
 {
-	while(get[index] >= 48 && get[index] <= 57)
+	int numb = 1, numb_2 = 10;
+	while((get[index] >= 48 && get[index] <= 57) || get[index] == '.')
 	{
-		arr[counter_arr] = (arr[counter_arr] * 10) + ((double)get[index++] - (double)'0');
+		if (get[index] == '.') {
+			numb = 10;
+			numb_2 = 1;
+			index++;
+		}
+		arr[counter_arr] = (arr[counter_arr] * numb_2)  +  (((double)get[index++] - (double)'0') / numb);
 	}
 	counter_arr++;
 	return (index - 1);
 }
 
-void Operator(char get[], char* str, int& counter_str, int& index)
-{
-	if (get[index] == '+') str[counter_str++] = '+';
-	else if (get[index] == '-')str[counter_str++] = '-';
-	else if (get[index] == '*')str[counter_str++] = '*';
-	else if (get[index] == '/')str[counter_str++] = '/';
-	else if (get[index] == '^')str[counter_str++] = '^';
-}
-
-void InputLine(char get[], const int n)  
-{
-	cin.getline(get, n);
-}
+	
