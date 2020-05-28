@@ -59,7 +59,6 @@ void Calculator(char* str, double* arr, int counter_arr, int counter_str)
 	}
 	for (int i = 0; i < counter_arr; i++)cout << "arr[" << i << "] = " << arr[i] << endl;
    cout << "Rezultat >> " << arr[counter_arr - 1] << endl;
-
 }
 
 ///////////////////////////////////////////////		main
@@ -82,7 +81,7 @@ void Calculator(char* str, double* arr, int counter_arr, int counter_str)
 
 	 for (int i = 0; get[i] != '='; i++)
 	 {
-		 if (get[i] >= 48 && get[i] <= 57)
+		 if (get[i] >= 48 && get[i] <= 57 || (get[i] == '-') && get[i + 1] >= 48 && get[i + 1] <= 57)
 		 {
 			 i = isInteger(arr, get, i, counter_arr);
 		 }
@@ -111,7 +110,7 @@ int isInteger(double* arr, char* get, int& index, int& counter_arr)
 		if (get[index] == '.' || numb_2 == 1) 
 		{
 			if (get[index] == '.')index++;
-
+			
 				numb *= 10;
 				numb_2 = 1;
 		}
